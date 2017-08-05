@@ -96,4 +96,3 @@ class LSM6DS3:
 
 
 
-
