@@ -1,0 +1,13 @@
+observations = csvread('timedoutput.csv');
+measurement = observations(:, 1:3);
+timestamps = observations(:, 4);
+blubs = csvread('blublog.csv');
+reptimestamps =repmat(timestamps, size(blubs'));
+repblubs = repmat(blubs, size(timestamps'))';
+absdiff = abs(reptimestamps - repblubs);
+indices = find(min(absdiff, [], 2) < 0.2);
+fltmeasurement = measurement(indices, :);
+notindices = find(min(absdiff, [], 2) >= 0.2);
+notfltmeasurement = measurement(notindices, :);
+figure; hold on; axis equal; scatter(fltmeasurement(:, 1), fltmeasurement(:, 2), 3, 'r'); scatter(notfltmeasurement(:, 1), notfltmeasurement(:, 2), 3, 'g');
+figure; hold on; axis equal; scatter(fltmeasurement(:, 2), fltmeasurement(:, 3), 3, 'r'); scatter(notfltmeasurement(:, 2), notfltmeasurement(:, 3), 3, 'g');
