@@ -94,7 +94,7 @@ class LSM6DS3:
 if __name__=='__main__':
     sensor = LSM6DS3()
     while True:
-        print(sensor.readRawAccelX(), ' ', sensor.readRawAccelY(), ' ', sensor.readRawAccelZ())
+        print(sensor.readRawAccelX(), ',', sensor.readRawAccelY(), ',', sensor.readRawAccelZ(), ',', time.time())
 
 
 
