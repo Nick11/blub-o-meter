@@ -10,16 +10,16 @@ Reads from a LSM6DS3 accelerometer and converts it to bubbles/time and finally s
 
 ## Prepare Raspberry Pi
 - configure i2c interface [see instructions by adafruit](https://learn.adafruit.com/adafruits-raspberry-pi-lesson-4-gpio-setup/configuring-i2c)
-  - `sudo apt-get install -y python-smbus i2c-tools`
+  - `sudo apt-get install -y python3-smbus i2c-tools`
   - `sudo raspi-config` then Advanced Options->I2C->Yes
   - test I2C using `sudo i2cdetect -y 1`(or `sudo i2cdetect -y 0` on a 256MB Raspberry Pi Model B)
 
 ## Dependencies
 - Adafruit Python GPIO Library [see instructions on github](https://github.com/adafruit/Adafruit_Python_GPIO) 
   -`sudo apt-get update`
-  -`sudo apt-get install build-essential python-pip python-dev python-smbus git`
+  -`sudo apt-get install build-essential python3-pip python3-dev python3-smbus git`
   -`cd externals`
   -`git clone https://github.com/adafruit/Adafruit_Python_GPIO.git`
   -`cd Adafruit_Python_GPIO`
-  -`sudo python setup.py install`
+  -`sudo python3 setup.py install`
 
