@@ -32,40 +32,40 @@ class LSM6DS3:
         accel_center_z = self.i2c.readS16(0x2C)
     
     def readRawAccelX(self):
-    	output = self.i2c.readS16(0X28)
-    	return output;
+        output = self.i2c.readS16(0X28)
+        return output;
     
     def readRawAccelY(self):
-    	output = self.i2c.readS16(0x2A)
-    	return output;
+        output = self.i2c.readS16(0x2A)
+        return output;
     
     def readRawAccelZ(self):
-    	output = self.i2c.readS16(0x2C)
-    	return output;
-    	
+        output = self.i2c.readS16(0x2C)
+        return output;
+        
     def calcAnglesXY(self):
-		#Using x y and z from accelerometer, calculate x and y angles
-		x_val = 0
-		y_val = 0
-		z_val = 0
-		result = 0
-		
-		x2 = 0
-		y2 = 0
-		z2 = 0
-		x_val = self.readRawAccelX() - accel_center_x
-		y_val = self.readRawAccelY() - accel_center_y
-		z_val = self.readRawAccelZ() - accel_center_z
-		
-		x2 = x_val*x_val
-		y2 = y_val*y_val
-		z2 = z_val*z_val
-		
-		result = math.sqrt(y2+z2)
-		if (result != 0):
-			result = x_val/result
-		accel_angle_x = math.atan(result)
-		return accel_angle_x;
+        #Using x y and z from accelerometer, calculate x and y angles
+        x_val = 0
+        y_val = 0
+        z_val = 0
+        result = 0
+        
+        x2 = 0
+        y2 = 0
+        z2 = 0
+        x_val = self.readRawAccelX() - accel_center_x
+        y_val = self.readRawAccelY() - accel_center_y
+        z_val = self.readRawAccelZ() - accel_center_z
+        
+        x2 = x_val*x_val
+        y2 = y_val*y_val
+        z2 = z_val*z_val
+        
+        result = math.sqrt(y2+z2)
+        if (result != 0):
+            result = x_val/result
+        accel_angle_x = math.atan(result)
+        return accel_angle_x;
 
 
 
@@ -91,7 +91,10 @@ class LSM6DS3:
 
 
 
-
+if __name__=='__main__':
+    sensor = LSM6DS3()
+    while True:
+        print(sensor.readRawAccelX(), ',', sensor.readRawAccelY(), ',', sensor.readRawAccelZ(), ',', time.time())
 
 
 
