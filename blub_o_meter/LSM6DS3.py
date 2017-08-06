@@ -24,7 +24,7 @@ class LSM6DS3:
         dataToWrite = 0 #Start Fresh!
         dataToWrite |= 0x03 # set at 50hz, bandwidth
         dataToWrite |= 0x00  # 2g accel range
-        dataToWrite |= 0x10 # 13hz ODR
+        dataToWrite |= 0x40 # 13hz ODR
         self.i2c.write8(0X10, dataToWrite) #writeRegister(LSM6DS3_ACC_GYRO_CTRL2_G, dataToWrite);
         
         accel_center_x = self.i2c.readS16(0X28)
@@ -95,6 +95,7 @@ if __name__=='__main__':
     sensor = LSM6DS3()
     while True:
         print(sensor.readRawAccelX(), ',', sensor.readRawAccelY(), ',', sensor.readRawAccelZ(), ',', time.time())
+        time.sleep(0.01)
 
 
 
