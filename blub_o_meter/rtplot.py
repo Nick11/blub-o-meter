@@ -10,7 +10,7 @@ npoints = n_drops
 fig = plt.figure(figsize=(7, 7))
 ax = fig.add_axes([0, 0, 1, 1], frameon=False)
 ax.set_xlim(0, npoints), ax.set_xticks([])
-ax.set_ylim(-100, 100), ax.set_yticks([])
+ax.set_ylim(0, 300), ax.set_yticks([])
 
 # Create rain data
 data = np.zeros([n_drops, 2])
@@ -21,27 +21,28 @@ scat = ax.scatter(data[:, 0], data[:, 1])
 
 global mean
 global n
-mean = 0
+mean = np.zeros([1, 2])
 n = 0
 
 def update(i):
-    newdata = sensor.readRawAccelX()
+    newdata = np.array([[sensor.readRawAccelY(), sensor.readRawAccelZ()]])
     global mean
     global n
     mean = (n * mean + newdata) / (n + 1)
     n = n + 1
     if i < npoints:
-        data[i, :] = np.array([[i, newdata]])
+        data[i, :] = newdata
     else:
-        temp = data[1:npoints, 1]
-        data[0:npoints-1, 1] = temp
-        data[npoints-1, 1] = newdata
+        temp = data[1:npoints, :]
+        data[0:npoints-1, :] = temp
+        data[npoints-1, :] = newdata
 
-    corr_data = np.copy(data)
-    corr_data[:, 1] = data[:, 1] - mean
-    #print(corr_data)
-    scat.set_offsets(corr_data)
+    corr_data = data - np.tile(mean, (npoints, 1))
+    corr_data_norm = np.linalg.norm(corr_data, ord=2, axis=1)
+    corr_data_with_time = np.column_stack((range(0, npoints), corr_data_norm))
+    print(corr_data_with_time)
+    scat.set_offsets(corr_data_with_time)
 
-ani = anim.FuncAnimation(fig, update, interval=10)
+ani = anim.FuncAnimation(fig, update, interval=100)
 
 plt.show()
