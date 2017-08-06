@@ -1,0 +1,17 @@
+data = csvread('100hz.csv');
+measurements = data(:, 1:3);
+normalised = measurements - repmat(mean(measurements, 1), [size(measurements, 1) 1]);
+stdev = std(measurements, 0, 1);
+nstdev = norm(stdev);
+nnormalised = sqrt(sum(abs(normalised).^2,2));
+g = fspecial('gaussian', [150 1], 50);
+flt = conv(nnormalised, g, 'same');
+ind = flt > thshld;
+thshld = 1 * nstdev;
+figure; hold on; plot(1:size(nnormalised,1), nnormalised); plot(1:size(flt,1), flt, 'color','red'); plot(1:size(ind, 1), thshld * ind, 'color', 'green');
+f = fft(nnormalised);
+fabs = abs(fft(nnormalised));
+figure;hold on; plot(fabs);
+f1 = f;
+f1(40:4504-40) = 0;
+figure; hold on; plot(abs(ifft(f1))); plot(1:size(nnormalised,1), nnormalised);
