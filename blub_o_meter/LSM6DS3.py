@@ -17,7 +17,7 @@ class LSM6DS3:
     global accel_center_z
     accel_center_z = 0
 
-    
+
     def __init__(self, address=0x6b, debug=0, pause=0.8):
         self.i2c = I2C.get_i2c_device(address)
         self.address = address
@@ -26,48 +26,30 @@ class LSM6DS3:
         dataToWrite |= 0x00  # 2g accel range
         dataToWrite |= 0x40 # 13hz ODR
         self.i2c.write8(0X10, dataToWrite) #writeRegister(LSM6DS3_ACC_GYRO_CTRL2_G, dataToWrite);
-        
+
         accel_center_x = self.i2c.readS16(0X28)
         accel_center_y = self.i2c.readS16(0x2A)
         accel_center_z = self.i2c.readS16(0x2C)
-    
+
+    def accelvalues(self):
+        while True:
+            yield self.readRawAccel()
+            time.sleep(0.01)
+
+    def readRawAccel(self):
+        return (self.readRawAccelX(), self.readRawAccelY(), self.readRawAccelZ())
+
     def readRawAccelX(self):
         output = self.i2c.readS16(0X28)
         return output;
-    
+
     def readRawAccelY(self):
         output = self.i2c.readS16(0x2A)
         return output;
-    
+
     def readRawAccelZ(self):
         output = self.i2c.readS16(0x2C)
         return output;
-        
-    def calcAnglesXY(self):
-        #Using x y and z from accelerometer, calculate x and y angles
-        x_val = 0
-        y_val = 0
-        z_val = 0
-        result = 0
-        
-        x2 = 0
-        y2 = 0
-        z2 = 0
-        x_val = self.readRawAccelX() - accel_center_x
-        y_val = self.readRawAccelY() - accel_center_y
-        z_val = self.readRawAccelZ() - accel_center_z
-        
-        x2 = x_val*x_val
-        y2 = y_val*y_val
-        z2 = z_val*z_val
-        
-        result = math.sqrt(y2+z2)
-        if (result != 0):
-            result = x_val/result
-        accel_angle_x = math.atan(result)
-        return accel_angle_x;
-
-
 
     def readRawGyroX(self):
         output = self.i2c.readS16(0X22)
@@ -96,7 +78,3 @@ if __name__=='__main__':
     while True:
         print(sensor.readRawAccelX(), ',', sensor.readRawAccelY(), ',', sensor.readRawAccelZ(), ',', time.time())
         time.sleep(0.01)
-
-
-
-

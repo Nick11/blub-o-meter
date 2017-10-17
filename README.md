@@ -23,3 +23,11 @@ Reads from a LSM6DS3 accelerometer and converts it to bubbles/time and finally s
   -`cd Adafruit_Python_GPIO`
   -`sudo python3 setup.py install`
 
+# Raw File Format (Version 0)
+ - Header:
+   - Magic number 0xb100bb100b (5 bytes)
+   - Format version (currently 0x000000, 3 bytes)
+   - Start timestamp (Unix timestamp in ms, 4 bytes)
+ - Any number of entries, each of the following format:
+   - Timestamp (# ms since start timestamp, 4 bytes)
+   - Raw x, y and z acceleration values (2 bytes each)
