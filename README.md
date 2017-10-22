@@ -24,10 +24,11 @@ Reads from a LSM6DS3 accelerometer and converts it to bubbles/time and finally s
   -`sudo python3 setup.py install`
 
 # Raw File Format (Version 0)
+The values are saved as unsigned little endian values, except for the acceleration values, which are signed.
  - Header:
    - Magic number 0xb100bb100b (5 bytes)
    - Format version (currently 0x000000, 3 bytes)
-   - Start timestamp (Unix timestamp in ms, 4 bytes)
+   - Start timestamp (Unix timestamp in ms, 8 bytes)
  - Any number of entries, each of the following format:
-   - Timestamp (# ms since start timestamp, 4 bytes)
+   - Timestamp (# ms since start timestamp, 4 bytes, may overflow)
    - Raw x, y and z acceleration values (2 bytes each)
